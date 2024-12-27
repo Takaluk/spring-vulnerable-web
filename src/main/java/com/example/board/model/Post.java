@@ -1,5 +1,6 @@
 package com.example.board.model;
 
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,4 +18,5 @@ public class Post {
     private String password; // 글 비밀번호
 
     private String department; // 게시판 부서
+    private String filePath; // 파일경로 및 이름
 }

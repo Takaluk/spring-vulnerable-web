@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${department} + ' 게시판 - 글 작성'">글 작성</title>
+    <title th:text="${department} + ' 게시판 - 글 수정'">글 수정</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -82,29 +82,61 @@
             font-weight: bold;
             margin-top: 10px;
         }
+
+        .file-notice {
+            color: gray;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            font-size: 16px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <h1 th:text="${department} + ' 게시판 - 글 작성'"></h1>
+    <h1 th:text="${department} + ' 게시판 - 글 수정'">글 수정</h1>
     <a th:href="'/board/' + ${department}">뒤로 가기</a>
 
     <div class="form-container">
-        <form th:action="'/board/' + ${department} + '/post'" method="post" enctype="multipart/form-data">
+        <form th:action="'/board/' + ${department} + '/post/' + ${post.id} + '/edit'" method="post" enctype="multipart/form-data">
             <label for="title">제목</label>
-            <input type="text" id="title" name="title" required>
-            
+            <input type="text" id="title" name="title" th:value="${post.title}" required>
+
             <label for="content">내용</label>
-            <textarea id="content" name="content" required></textarea>
+            <textarea id="content" name="content" required th:text="${post.content}"></textarea>
 
             <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" placeholder="비밀번호 입력" required>
 
-            <!-- 파일 업로드 필드 -->
             <label for="file" class="file-label">첨부 파일</label>
             <input type="file" id="file" name="file" class="file-input" accept="image/*, .pdf, .docx, .txt">
-            
-            <button type="submit">등록</button>
+
+            <!-- 기존 파일이 있을 경우 파일 이름만 출력 -->
+            <div>
+                <span th:if="${post.filePath}" class="file-notice">
+                    기존 파일: <span th:text="${post.fileName}">파일명</span>
+                </span>
+                <span th:if="${post.filePath == null}" class="file-notice">첨부 파일 없음</span>
+            </div>
+
+            <button type="submit">수정 완료</button>
         </form>
+    </div>
+
+    <div class="back-link">
+        <a th:href="'/board/' + ${department}">게시판으로 돌아가기</a>
     </div>
 </body>
 </html>
