@@ -78,6 +78,18 @@
             text-align: center;
             margin-top: 10px;
         }
+        .find-password {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .find-password a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .find-password a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -94,6 +106,9 @@
         <p class="error-message">
             <span th:if="${param.error}" th:text="'로그인에 실패했습니다. 다시 시도해주세요.'"></span>
         </p>
+        <div class="find-password">
+            <a href="/find-password">비밀번호를 잊으셨나요?</a>
+        </div>
     </div>
 </body>
 </html>
