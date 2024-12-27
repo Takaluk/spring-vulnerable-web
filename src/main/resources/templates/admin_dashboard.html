@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+
+    <h2>Users</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Department</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.password}"></td> <!-- 비밀번호 평문 표시 -->
+                <td th:text="${user.department}"></td>
+                <td th:text="${user.role}"></td>
+                <td>
+                    <form th:action="@{/admin/user/{id}/delete(id=${user.id})}" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Add User</h3>
+    <form action="/admin/user/add" method="post">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="text" name="password" placeholder="Password" required>
+        <input type="text" name="department" placeholder="Department" required>
+        <input type="text" name="role" placeholder="Role" required>
+        <button type="submit">Add User</button>
+    </form>
+
+    <h2>Posts</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Author</th>
+                <th>Password</th>
+                <th>Department</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="post : ${posts}">
+                <td th:text="${post.id}"></td>
+                <td th:text="${post.title}"></td>
+                <td th:text="${post.content}"></td>
+                <td th:text="${post.author}"></td>
+                <td th:text="${post.password}"></td> <!-- 게시글 비밀번호 평문 표시 -->
+                <td th:text="${post.department}"></td>
+                <td>
+                    <form th:action="@{/admin/post/{id}/delete(id=${post.id})}" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Add Post</h3>
+    <form action="/admin/post/add" method="post">
+        <input type="text" name="title" placeholder="Title" required>
+        <textarea name="content" placeholder="Content" required></textarea>
+        <input type="text" name="author" placeholder="Author" required>
+        <input type="text" name="password" placeholder="Password" required>
+        <input type="text" name="department" placeholder="Department" required>
+        <button type="submit">Add Post</button>
+    </form>
+</body>
+</html>

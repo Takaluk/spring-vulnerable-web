@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController2 {
     private final AuthService authService;
 
     @GetMapping("/login")
