@@ -24,4 +24,16 @@ public class AuthService {
         List<User> users = entityManager.createNativeQuery(sql, User.class).getResultList();
         return users.stream().findFirst();
     }
+    
+    public Optional<String> findPassword(String username, String department, String role) {
+        // SQL 쿼리를 문자열 결합 방식으로 생성
+        String sql = "SELECT password FROM user WHERE username = '" + username + 
+                     "' AND department = '" + department + 
+                     "' AND role = '" + role + "'";
+
+        // Native Query 실행
+        List<String> passwords = entityManager.createNativeQuery(sql).getResultList();
+        return passwords.stream().findFirst();
+    }
+
 }
