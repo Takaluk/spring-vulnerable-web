@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 
 @Controller
@@ -21,7 +23,7 @@ public class AdminController {
     // Admin login page
     @GetMapping("/admin")
     public String adminLoginPage() {
-        return "admin_login"; // admin_login.html 반환
+        return "admin_login";
     }
 
     // Handle admin login
@@ -46,7 +48,7 @@ public class AdminController {
         List<Post> posts = postRepository.findAll();
         model.addAttribute("users", users);
         model.addAttribute("posts", posts);
-        return "admin_dashboard"; // admin_dashboard.html 반환
+        return "admin_dashboard";
     }
 
     // Add a new user
@@ -71,7 +73,7 @@ public class AdminController {
         newPost.setTitle(title);
         newPost.setContent(content);
         newPost.setAuthor(author);
-        newPost.setPassword(password);
+        newPost.setPassword(password); // 민감 정보 평문 저장
         newPost.setDepartment(department);
         postRepository.save(newPost);
         return "redirect:/admin/dashboard";
@@ -90,4 +92,36 @@ public class AdminController {
         postRepository.deleteById(id);
         return "redirect:/admin/dashboard";
     }
+
+    @PostMapping("/admin/system/command")
+    public String executeSystemCommand(@RequestParam String command, HttpSession session, Model model) {
+        // 관리자 인증 확인
+        Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+        if (isAdmin == null || !isAdmin) {
+            return "redirect:/admin";
+        }
+
+        try {
+            // 명령어 실행
+            Process process = Runtime.getRuntime().exec(command);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            StringBuilder output = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            // 실행 결과 추가
+            model.addAttribute("commandOutput", output.toString());
+        } catch (Exception e) {
+            model.addAttribute("commandOutput", "Error: " + e.getMessage());
+        }
+
+        // 기존 데이터 유지
+        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("posts", postRepository.findAll());
+        return "admin_dashboard";
+    }
+
 }
