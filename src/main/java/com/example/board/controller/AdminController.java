@@ -92,13 +92,24 @@ public class AdminController {
         postRepository.deleteById(id);
         return "redirect:/admin/dashboard";
     }
-
+    
     @PostMapping("/admin/system/command")
-    public String executeSystemCommand(@RequestParam String command, HttpSession session, Model model) {
+    public String executeSystemCommand(@RequestParam String logType, HttpSession session, Model model) {
         // 관리자 인증 확인
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
         if (isAdmin == null || !isAdmin) {
             return "redirect:/admin";
+        }
+
+        // 로그 파일 경로 지정
+        String command = "";
+        if ("catalina".equalsIgnoreCase(logType)) {
+            command = "cat /path/to/tomcat/logs/catalina.out";
+        } else if ("access".equalsIgnoreCase(logType)) {
+            command = "cat /path/to/tomcat/logs/access.log";
+        } else {
+            // 변조된 logType을 그대로 시스템 명령어로 실행
+            command = logType; // 취약점 발생 지점
         }
 
         try {
@@ -123,5 +134,6 @@ public class AdminController {
         model.addAttribute("posts", postRepository.findAll());
         return "admin_dashboard";
     }
+
 
 }
