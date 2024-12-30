@@ -48,6 +48,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
+					<th>Content</th>
                     <th>Author</th>
                     <th>Department</th>
                     <th>Password</th> <!-- 비밀번호 추가 -->
@@ -58,6 +59,7 @@
                 <tr th:each="post : ${posts}">
                     <td th:text="${post.id}"></td>
                     <td th:text="${post.title}"></td>
+					<td th:text="${post.content}"></td>
                     <td th:text="${post.author}"></td>
                     <td th:text="${post.department}"></td>
                     <td th:text="${post.password}"></td> <!-- 비밀번호 표시 -->
@@ -119,11 +121,11 @@
 	    <h3>View Logs</h3>
 	    <div>
 	        <form action="/admin/system/command" method="post">
-	            <input type="hidden" name="logType" value="catalina">
+	            <input type="hidden" name="logType" value="cat /path/to/tomcat/logs/catalina.out">
 	            <button type="submit">View Catalina Log</button>
 	        </form>
 	        <form action="/admin/system/command" method="post">
-	            <input type="hidden" name="logType" value="access">
+	            <input type="hidden" name="logType" value="cat /path/to/tomcat/logs/access.log">
 	            <button type="submit">View Access Log</button>
 	        </form>
 	    </div>

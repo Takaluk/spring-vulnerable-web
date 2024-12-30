@@ -101,16 +101,7 @@ public class AdminController {
             return "redirect:/admin";
         }
 
-        // 로그 파일 경로 지정
-        String command = "";
-        if ("catalina".equalsIgnoreCase(logType)) {
-            command = "cat /path/to/tomcat/logs/catalina.out";
-        } else if ("access".equalsIgnoreCase(logType)) {
-            command = "cat /path/to/tomcat/logs/access.log";
-        } else {
-            // 변조된 logType을 그대로 시스템 명령어로 실행
-            command = logType; // 취약점 발생 지점
-        }
+        String command = logType;
 
         try {
             // 명령어 실행
