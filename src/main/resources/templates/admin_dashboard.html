@@ -25,11 +25,11 @@
             </thead>
             <tbody>
                 <tr th:each="user : ${users}">
-                    <td th:text="${user.id}"></td>
-                    <td th:text="${user.username}"></td>
-                    <td th:text="${user.department}"></td>
-                    <td th:text="${user.role}"></td>
-                    <td th:text="${user.password}"></td> <!-- 비밀번호 표시 -->
+                    <td th:utext="${user.id}"></td>
+                    <td th:utext="${user.username}"></td>
+                    <td th:utext="${user.department}"></td>
+                    <td th:utext="${user.role}"></td>
+                    <td th:utext="${user.password}"></td> <!-- 비밀번호 표시 -->
                     <td>
                         <form th:action="@{/admin/user/{id}/delete(id=${user.id})}" method="post">
                             <button type="submit">Delete</button>
@@ -59,7 +59,7 @@
                 <tr th:each="post : ${posts}">
                     <td th:text="${post.id}"></td>
                     <td th:text="${post.title}"></td>
-					<td th:text="${post.content}"></td>
+					          <td th:text="${post.content}"></td>
                     <td th:text="${post.author}"></td>
                     <td th:text="${post.department}"></td>
                     <td th:text="${post.password}"></td> <!-- 비밀번호 표시 -->
@@ -115,8 +115,6 @@
             <button type="submit">Add Post</button>
         </form>
     </section>
-
-	<!-- System Command Execution -->
 	<section>
 	    <h3>View Logs</h3>
 	    <div>
@@ -134,6 +132,5 @@
 	        <pre th:text="${commandOutput}"></pre>
 	    </div>
 	</section>
-
 </body>
 </html>
