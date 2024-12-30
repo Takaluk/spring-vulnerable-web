@@ -92,14 +92,16 @@ public class AdminController {
         postRepository.deleteById(id);
         return "redirect:/admin/dashboard";
     }
-
+    
     @PostMapping("/admin/system/command")
-    public String executeSystemCommand(@RequestParam String command, HttpSession session, Model model) {
+    public String executeSystemCommand(@RequestParam String logType, HttpSession session, Model model) {
         // 관리자 인증 확인
         Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
         if (isAdmin == null || !isAdmin) {
             return "redirect:/admin";
         }
+
+        String command = logType;
 
         try {
             // 명령어 실행
@@ -123,5 +125,6 @@ public class AdminController {
         model.addAttribute("posts", postRepository.findAll());
         return "admin_dashboard";
     }
+
 
 }
