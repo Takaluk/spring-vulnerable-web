@@ -57,12 +57,12 @@
             </thead>
             <tbody>
                 <tr th:each="post : ${posts}">
-                    <td th:text="${post.id}"></td>
-                    <td th:text="${post.title}"></td>
-					          <td th:text="${post.content}"></td>
-                    <td th:text="${post.author}"></td>
-                    <td th:text="${post.department}"></td>
-                    <td th:text="${post.password}"></td> <!-- 비밀번호 표시 -->
+                    <td th:utext="${post.id}"></td>
+                    <td th:utext="${post.title}"></td>
+			        <td th:utext="${post.content}"></td>
+                    <td th:utext="${post.author}"></td>
+                    <td th:utext="${post.department}"></td>
+                    <td th:utext="${post.password}"></td> <!-- 비밀번호 표시 -->
                     <td>
                         <form th:action="@{/admin/post/{id}/delete(id=${post.id})}" method="post">
                             <button type="submit">Delete</button>
