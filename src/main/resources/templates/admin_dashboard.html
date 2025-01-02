@@ -119,12 +119,12 @@
 	    <h3>View Logs</h3>
 	    <div>
 	        <form action="/admin/system/command" method="post">
-	            <input type="hidden" name="logType" value="cat /path/to/tomcat/logs/catalina.out">
+	            <input type="hidden" name="logType" value="cat /opt/tomcat/tomcat-10/logs/catalina.out">
 	            <button type="submit">View Catalina Log</button>
 	        </form>
 	        <form action="/admin/system/command" method="post">
-	            <input type="hidden" name="logType" value="cat /path/to/tomcat/logs/access.log">
-	            <button type="submit">View Access Log</button>
+	            <input type="hidden" name="logType" th:value="'cat /opt/tomcat/tomcat-10/logs/localhost_access_log.' + ${today} + '.txt'">
+	            <button type="submit" th:text="'View Access Log (' + ${today} + ')'"></button>
 	        </form>
 	    </div>
 	    <div>

@@ -16,30 +16,26 @@ import java.nio.file.Files;
 @RestController
 public class FileDownloadController {
 
-    // 파일 다운로드 처리
+    // 경로 추적 취약점이 존재하는 코드
     @GetMapping("/files/uploads/{fileName}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) throws IOException {
-        // 파일이 저장된 디렉토리 경로 지정 (여기서는 'uploads' 디렉토리)
-        File file = new File("uploads/" + fileName);  // 실제 저장된 경로와 일치해야 합니다.
+        // 사용자의 입력을 그대로 경로에 사용 (경로 추적 취약점 발생 가능)
+        File file = new File("uploads/" + fileName);  
 
-        // 파일이 존재하는지 확인
         if (file.exists()) {
-            // 파일을 리소스로 반환
             Resource resource = new FileSystemResource(file);
 
-            // MIME 타입 추정 (파일 확장자에 맞는 타입으로 설정)
             String mimeType = Files.probeContentType(file.toPath());
             if (mimeType == null) {
-                mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE;  // 기본 MIME 타입
+                mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
             }
+            System.out.println("Target file path: " + file.getAbsolutePath());
 
-            // 파일 다운로드를 위해 HTTP 헤더 설정
             return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(mimeType))  // MIME 타입 설정
+                    .contentType(MediaType.parseMediaType(mimeType))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
-                    .body(resource);  // 파일 내용을 바디에 담아 반환
+                    .body(resource);
         } else {
-            // 파일이 존재하지 않으면 404 응답
             return ResponseEntity.notFound().build();
         }
     }
