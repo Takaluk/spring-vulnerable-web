@@ -29,6 +29,7 @@ public class FileDownloadController {
             if (mimeType == null) {
                 mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
             }
+            System.out.println("Target file path: " + file.getAbsolutePath());
 
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(mimeType))

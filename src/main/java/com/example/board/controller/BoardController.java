@@ -76,6 +76,7 @@ public String createPost(@PathVariable String department,
     if (user != null) {
         post.setAuthor(user.getUsername()); // Assuming Post has an author field
     }
+    System.out.println("Current working directory: " + System.getProperty("user.dir"));
 
     // 파일이 첨부된 경우 처리
     if (!file.isEmpty()) {
@@ -89,6 +90,7 @@ public String createPost(@PathVariable String department,
             String originalFileName = file.getOriginalFilename();
             Path targetPath = uploadPath.resolve(originalFileName);
             file.transferTo(targetPath);
+            System.out.println("Target file path: " + uploadPath);
 
             // 파일 경로를 Post 객체에 저장
             post.setFilePath(targetPath.toString());  // DB에 저장할 파일 경로 설정
@@ -119,33 +121,6 @@ public String createPost(@PathVariable String department,
         // URL-encode the department name in case it contains special characters
         String encodedDepartment = URLEncoder.encode(department, "UTF-8");
         return "redirect:/board/" + encodedDepartment;
-    }
-    
-    @GetMapping("/{fileName}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) throws IOException {
-        // 파일이 저장된 디렉토리 경로 지정 (여기서는 'uploads' 디렉토리)
-        File file = new File("uploads/" + fileName);  // 실제 저장된 경로와 일치해야 합니다.
-
-        // 파일이 존재하는지 확인
-        if (file.exists()) {
-            // 파일을 리소스로 반환
-            Resource resource = new FileSystemResource(file);
-
-            // MIME 타입 추정 (파일 확장자에 맞는 타입으로 설정)
-            String mimeType = Files.probeContentType(file.toPath());
-            if (mimeType == null) {
-                mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE;  // 기본 MIME 타입
-            }
-
-            // 파일 다운로드를 위해 HTTP 헤더 설정
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(mimeType))  // MIME 타입 설정
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
-                    .body(resource);  // 파일 내용을 바디에 담아 반환
-        } else {
-            // 파일이 존재하지 않으면 404 응답
-            return ResponseEntity.notFound().build();
-        }
     }
 
     @GetMapping("/board/{department}/post/{id}/edit")
