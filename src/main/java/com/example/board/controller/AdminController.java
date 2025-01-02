@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -43,6 +45,9 @@ public class AdminController {
         if (isAdmin == null || !isAdmin) {
             return "redirect:/admin";
         }
+        String today = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
+        
+        model.addAttribute("today", today);
 
         List<User> users = userRepository.findAll();
         List<Post> posts = postRepository.findAll();
