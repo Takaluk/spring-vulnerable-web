@@ -20,7 +20,7 @@ public class FileDownloadController {
     @GetMapping("/files/uploads")
     public ResponseEntity<Resource> downloadFile(@RequestParam String fileName) throws IOException {
         // 사용자의 입력을 그대로 경로에 사용 (경로 추적 취약점 발생 가능)
-        File file = new File("uploads/" + fileName);  
+        File file = new File(fileName);  
 
         if (file.exists()) {
             Resource resource = new FileSystemResource(file);
