@@ -44,10 +44,10 @@ public class BoardController {
     // Board page for a specific department
     @GetMapping("/board/{department}")
     public String board(@PathVariable String department, HttpSession session, Model model) {
-//        User user = (User) session.getAttribute("user");
-//        if (user == null || (!user.getDepartment().equals(department) && !user.getRole().equals("부장"))) {
-//            return "error";
-//        }
+        User user = (User) session.getAttribute("user");
+        if (user == null || (!user.getDepartment().equals(department) && !user.getRole().equals("부장"))) {
+        	return "redirect:/login";
+        }
 
         List<Post> posts = boardService.getPostsByDepartment(department);
         model.addAttribute("posts", posts);
