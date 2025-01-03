@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <style>
+        .password-cell {
+            -webkit-text-security: disc; /* 크롬, 사파리에서 비밀번호 마스킹 */
+            text-security: disc; /* Firefox에서는 지원되지 않지만 구현 예시로 남겨둡니다 */
+        }
+    </style>
 </head>
 <body>
     <h1>Admin Dashboard</h1>
@@ -19,7 +25,7 @@
                     <th>Username</th>
                     <th>Department</th>
                     <th>Role</th>
-                    <th>Password</th> <!-- 비밀번호 추가 -->
+                    <th>Password</th> 
                     <th>Action</th>
                 </tr>
             </thead>
@@ -29,7 +35,7 @@
                     <td th:utext="${user.username}"></td>
                     <td th:utext="${user.department}"></td>
                     <td th:utext="${user.role}"></td>
-                    <td th:utext="${user.password}"></td> <!-- 비밀번호 표시 -->
+                    <td class="password-cell" th:text="${user.password}"></td> 
                     <td>
                         <form th:action="@{/admin/user/{id}/delete(id=${user.id})}" method="post">
                             <button type="submit">Delete</button>
@@ -48,10 +54,10 @@
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
-					<th>Content</th>
+                    <th>Content</th>
                     <th>Author</th>
                     <th>Department</th>
-                    <th>Password</th> <!-- 비밀번호 추가 -->
+                    <th>Password</th> 
                     <th>Action</th>
                 </tr>
             </thead>
@@ -59,10 +65,10 @@
                 <tr th:each="post : ${posts}">
                     <td th:utext="${post.id}"></td>
                     <td th:utext="${post.title}"></td>
-			        <td th:utext="${post.content}"></td>
+                    <td th:utext="${post.content}"></td>
                     <td th:utext="${post.author}"></td>
                     <td th:utext="${post.department}"></td>
-                    <td th:utext="${post.password}"></td> <!-- 비밀번호 표시 -->
+                    <td class="password-cell" th:text="${post.password}"></td> 
                     <td>
                         <form th:action="@{/admin/post/{id}/delete(id=${post.id})}" method="post">
                             <button type="submit">Delete</button>
@@ -115,22 +121,24 @@
             <button type="submit">Add Post</button>
         </form>
     </section>
-	<section>
-	    <h3>View Logs</h3>
-	    <div>
-	        <form action="/admin/system/command" method="post">
-	            <input type="hidden" name="logType" value="cat /opt/tomcat/tomcat-10/logs/catalina.out">
-	            <button type="submit">View Catalina Log</button>
-	        </form>
-	        <form action="/admin/system/command" method="post">
-	            <input type="hidden" name="logType" th:value="'cat /opt/tomcat/tomcat-10/logs/localhost_access_log.' + ${today} + '.txt'">
-	            <button type="submit" th:text="'View Access Log (' + ${today} + ')'"></button>
-	        </form>
-	    </div>
-	    <div>
-	        <h4>Log Output:</h4>
-	        <pre th:text="${commandOutput}"></pre>
-	    </div>
-	</section>
+
+    <!-- View Logs -->
+    <section>
+        <h3>View Logs</h3>
+        <div>
+            <form action="/admin/system/command" method="post">
+                <input type="hidden" name="logType" value="cat /opt/tomcat/tomcat-10/logs/catalina.out">
+                <button type="submit">View Catalina Log</button>
+            </form>
+            <form action="/admin/system/command" method="post">
+                <input type="hidden" name="logType" th:value="'cat /opt/tomcat/tomcat-10/logs/localhost_access_log.' + ${today} + '.txt'">
+                <button type="submit" th:text="'View Access Log (' + ${today} + ')'"></button>
+            </form>
+        </div>
+        <div>
+            <h4>Log Output:</h4>
+            <pre th:text="${commandOutput}"></pre>
+        </div>
+    </section>
 </body>
 </html>
