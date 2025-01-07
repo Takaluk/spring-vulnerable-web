@@ -36,11 +36,6 @@ public class BoardController {
     // Board page for a specific department
     @GetMapping("/board/{department}")
     public String board(@PathVariable String department, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("user");
-        if (user == null || (!user.getDepartment().equals(department) && !user.getRole().equals("부장"))) {
-        	return "redirect:/login";
-        }
-
         List<Post> posts = boardService.getPostsByDepartment(department);
         model.addAttribute("posts", posts);
         model.addAttribute("department", department);
@@ -54,42 +49,34 @@ public class BoardController {
         return "post_form";
     }
 
-    // Handle form submission to create a new post
     @PostMapping("/board/{department}/post")
 public String createPost(@PathVariable String department, 
                          Post post, 
                          HttpSession session, 
                          @RequestParam("file") MultipartFile file) throws UnsupportedEncodingException {
-    // Set department for the post
     post.setDepartment(department);
     
-    // Optionally, associate the post with the logged-in user
     User user = (User) session.getAttribute("user");
     if (user != null) {
-        post.setAuthor(user.getUsername()); // Assuming Post has an author field
+        post.setAuthor(user.getUsername());
     }
-    System.out.println("Current working directory: " + System.getProperty("user.dir"));
 
-    // 파일이 첨부된 경우 처리
     if (!file.isEmpty()) {
         try {
             
-            // 파일을 저장할 경로 지정 (서버 내의 특정 디렉토리)
-            Path uploadPath = Paths.get("uploads");  // "uploads" 디렉토리로 파일 저장
+            Path uploadPath = Paths.get("uploads"); 
             if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);  // 디렉토리가 없으면 생성
+                Files.createDirectories(uploadPath);
             }
             String originalFileName = file.getOriginalFilename();
             Path targetPath = uploadPath.resolve(originalFileName);
             file.transferTo(targetPath);
-            System.out.println("Target file path: " + uploadPath);
 
-            // 파일 경로를 Post 객체에 저장
-            post.setFilePath(targetPath.toString());  // DB에 저장할 파일 경로 설정
+            post.setFilePath(targetPath.toString());
         } catch (IOException e) {
             e.printStackTrace();
-            // 파일 처리 중 오류가 발생하면 적절한 예외 처리를 해야 함
-            return "error";  // 에러 페이지로 리턴 (예: 오류 메시지를 보여주는 페이지)
+
+            return "error";  
         }
     }
 
